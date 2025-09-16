@@ -5,9 +5,10 @@ metadata:
   labels:
     app: frontend
 spec:
-  type: LoadBalancer   # Expose frontend publicly
+  type: NodePort
   selector:
-    app: frontend      # Must match labels in your Deployment
+    app: frontend   # Must match your Deployment label
   ports:
-    - port: 80         # Port exposed outside
-      targetPort: 80   # Port inside the container
+    - port: 80        # Service port inside cluster
+      targetPort: 80  # Container port
+      nodePort: 30080 # Optional: choose NodePort (range 30000–32767)
