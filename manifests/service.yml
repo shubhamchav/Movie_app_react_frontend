@@ -5,10 +5,9 @@ metadata:
   labels:
     app: frontend
 spec:
-  type: NodePort
+  type: LoadBalancer   # Expose with public ELB
   selector:
-    app: frontend   # Must match your Deployment label
+    app: frontend
   ports:
-    - port: 80        # Service port inside cluster
-      targetPort: 80  # Container port
-      nodePort: 30080 # Optional: choose NodePort (range 30000–32767)
+    - port: 80        # external port (ELB)
+      targetPort: 80
