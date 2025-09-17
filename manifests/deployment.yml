@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend-container
-        image: 054037125756.dkr.ecr.us-east-1.amazonaws.com/react-frontend
+        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/shubham-react-movieapp:latest
         ports:
         - containerPort: 80
         env:
