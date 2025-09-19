@@ -1,16 +1,12 @@
 name: React Frontend CI/CD Pipeline
  
-# This workflow handles the CI/CD process for the React frontend
-# It builds, tests, and deploys the React application to S3
- 
-# Trigger on push to main branch or pull requests
 on:
   push:
     branches:
       - master
   pull_request:
     branches:
-      - main
+      - master
  
 # Environment variables
 env:
