@@ -81,7 +81,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ARN }}
-          role-session-name: react-app-session
+          role-session-name: shubham_movie_app_role
           aws-region: ${{ secrets.AWS_REGION }}
  
       # Sync build folder to S3
