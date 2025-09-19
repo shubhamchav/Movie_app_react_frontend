@@ -16,7 +16,7 @@ on:
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }} # Change to your preferred region
   S3_BUCKET: shubham-react-movie-app # Change to your bucket name
-  SKIP_PREFLIGHT_CHECK: true # Skip Create React App dependency checks
+  
  
 # Permissions for OIDC authentication
 permissions:
