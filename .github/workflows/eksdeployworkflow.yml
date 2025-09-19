@@ -44,11 +44,7 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
  
-      # Create or update .env file with SKIP_PREFLIGHT_CHECK
-      - name: Setup Environment
-        run: |
-          echo "SKIP_PREFLIGHT_CHECK=true" >> .env
-          cat .env
+     
  
       # Run unit tests and generate code coverage
       - name: Run Tests and Generate Coverage
