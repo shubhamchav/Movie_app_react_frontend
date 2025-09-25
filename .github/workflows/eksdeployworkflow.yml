@@ -1,5 +1,5 @@
 name: React Frontend CI/CD Pipeline
- 
+
 on:
   push:
     branches:
@@ -7,76 +7,55 @@ on:
   pull_request:
     branches:
       - master
- 
-# Environment variables
-env:
-  AWS_REGION: ${{ secrets.AWS_REGION }} # Change to your preferred region
-  S3_BUCKET: shubham-react-movie-app # Change to your bucket name
-  
- 
-# Permissions for OIDC authentication
+
 permissions:
   id-token: write
   contents: read
- 
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
- 
+
     steps:
-      # Checkout code
       - name: Checkout
         uses: actions/checkout@v4
- 
-      # Setup Node.js - using Node.js 16 for better compatibility with older React apps
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16' # Using Node.js 16 for better compatibility
+          node-version: '16'
           cache: 'npm'
           cache-dependency-path: './package-lock.json'
- 
-      # Install dependencies with legacy-peer-deps to handle @material-ui/core with React 18
+
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
- 
-     
- 
-      # Run unit tests and generate code coverage
+
       - name: Run Tests and Generate Coverage
-        continue-on-error: true  # Allow this step to fail as test files are not present
+        continue-on-error: true
         run: |
           echo "Running tests..."
           npm test -- --watchAll=false
- 
-      # Upload coverage reports as artifacts
+
       - name: Upload Coverage Reports
-        if: always()  # Run even if tests fail
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
- 
-      # Build the React app
+
       - name: Build
         run: CI=false npm run build
- 
-      # # Run SonarQube analysis
-      # - name: SonarQube Scan
-      #   uses: sonarsource/sonarqube-scan-action@master
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
- 
-      # Configure AWS credentials using OIDC
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ARN }}
           role-session-name: shubham_movie_app_role
-          aws-region: ${{ secrets.AWS_REGION }}
- 
-      # Sync build folder to S3
+          aws-region: ${{ vars.AWS_REGION }}
+
       - name: Deploy to S3
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          S3_BUCKET: ${{ vars.S3_BUCKET }}
         run: |
-          aws s3 sync --delete ./build/ s3://${{ env.S3_BUCKET }}
+          aws s3 sync --delete ./build/ s3://$S3_BUCKET/
